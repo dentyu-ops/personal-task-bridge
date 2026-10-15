@@ -4,35 +4,232 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Personal Task Bridge</title>
+  <meta name="description"
+        content="Personal Task Bridge - PythonとMCPを使用した個人向けGoogle Tasks連携ソフトウェアの開発記録">
+  <title>Personal Task Bridge | Development Project</title>
   <style>
-    body { font-family: sans-serif; max-width: 720px;
-           margin: 60px auto; padding: 0 20px;
-           line-height: 1.8; color: #253047; }
-    h1 { color: #234c80; }
-    a { color: #2364aa; }
+    :root {
+      color-scheme: light;
+      --primary: #244a79;
+      --text: #243247;
+      --muted: #607086;
+      --background: #f4f7fb;
+      --border: #dce4ee;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--background);
+      color: var(--text);
+      font-family: system-ui, -apple-system, sans-serif;
+      line-height: 1.8;
+    }
+    header {
+      background: #172d4d;
+      color: white;
+      padding: 60px 24px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 2.3rem; }
+    header p { color: #d9e5f6; }
+    main { max-width: 900px; margin: 32px auto; padding: 0 20px; }
+    section {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    h2 { color: var(--primary); margin-top: 0; }
+    h3 { margin-bottom: 6px; }
+    ul { padding-left: 24px; }
+    .tag {
+      display: inline-block;
+      background: #e8eff8;
+      border-radius: 6px;
+      padding: 3px 10px;
+      margin: 4px 5px 4px 0;
+      font-size: 0.9rem;
+    }
+    .architecture {
+      background: #f3f6fa;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 22px;
+      text-align: center;
+    }
+    .node {
+      background: white;
+      border: 1px solid #cbd7e6;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 0 auto;
+      max-width: 370px;
+    }
+    .arrow { color: var(--muted); padding: 6px; }
+    a { color: #2163a5; }
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 1.8rem; }
+      section { padding: 20px; }
+    }
   </style>
 </head>
 <body>
+
+<header>
   <h1>Personal Task Bridge</h1>
-  <p>Personal Task Bridgeは、個人のGoogle Tasksを
-     ChatGPTから管理するための非営利の個人用ツールです。</p>
+  <p>Python / Model Context Protocol / Google Tasks API</p>
+  <p>個人向けタスク管理連携ソフトウェアの開発プロジェクト</p>
+</header>
 
-  <h2>主な機能</h2>
+<main>
+
+<section>
+  <h2>プロジェクト概要</h2>
+  <p>
+    Personal Task Bridgeは、Google Tasksの操作を
+    外部のクライアントから実行するために開発した、
+    非営利の個人用ソフトウェアです。
+  </p>
+  <p>
+    PythonでModel Context Protocol（MCP）サーバーを実装し、
+    Google Tasks APIと連携しています。
+    主な利用環境はOpenAIのChatGPTです。
+  </p>
+  <p>
+    一般ユーザー向けのサービスではなく、
+    開発者本人による利用と技術検証を目的としています。
+  </p>
+</section>
+
+<section>
+  <h2>システム構成</h2>
+  <p>
+    クライアントからの操作要求をMCPサーバーが受け取り、
+    Google Tasks APIへリクエストを送信する構成です。
+  </p>
+
+  <div class="architecture" role="img"
+       aria-label="ChatGPTからMCPトンネルとPythonサーバーを経由してGoogle Tasks APIに接続する構成">
+    <div class="node">ChatGPT（クライアント）</div>
+    <div class="arrow">↓ 操作リクエスト</div>
+    <div class="node">OpenAI MCP Tunnel</div>
+    <div class="arrow">↓ MCP通信</div>
+    <div class="node">Python MCP Server</div>
+    <div class="arrow">↓ OAuth 2.0認証・API通信</div>
+    <div class="node">Google Tasks API</div>
+  </div>
+
+  <p>
+    PythonサーバーはGoogle CloudのLinux仮想マシン上で稼働し、
+    systemdによって自動起動と異常終了時の再起動を管理しています。
+  </p>
+</section>
+
+<section>
+  <h2>使用技術</h2>
+  <div>
+    <span class="tag">Python 3.12</span>
+    <span class="tag">Model Context Protocol</span>
+    <span class="tag">Google Tasks API</span>
+    <span class="tag">OAuth 2.0</span>
+    <span class="tag">Ubuntu 24.04 LTS</span>
+    <span class="tag">Google Cloud Compute Engine</span>
+    <span class="tag">systemd</span>
+    <span class="tag">GitHub Pages</span>
+  </div>
+
+  <h3>Python / MCP</h3>
+  <p>
+    Python製MCPサーバーでタスク操作用のツールを実装しています。
+    クライアントから各ツールを呼び出すことで、
+    Google Tasksのデータを取得・変更します。
+  </p>
+
+  <h3>Google Tasks API / OAuth 2.0</h3>
+  <p>
+    Googleの公式APIを使用してタスクを管理しています。
+    OAuth 2.0により、Googleアカウントの許可を受けた
+    範囲内で操作を行います。
+  </p>
+
+  <h3>Google Cloud / Ubuntu</h3>
+  <p>
+    Google Cloud Compute Engine上にUbuntuの
+    仮想マシンを構築しています。
+    サーバーをクラウドで運用することで、
+    ローカルPCの起動状態に依存しない構成としています。
+  </p>
+</section>
+
+<section>
+  <h2>実装機能</h2>
   <ul>
-    <li>Google Tasksのタスクリストとタスクの取得</li>
-    <li>タスクの新規登録</li>
-    <li>既存タスクの更新と完了操作</li>
+    <li>Google Tasksのタスクリスト一覧取得</li>
+    <li>指定したタスクリスト内のタスク取得</li>
+    <li>未完了タスクの抽出</li>
+    <li>新しいタスクの作成</li>
+    <li>既存タスクのタイトル・メモ・期限の更新</li>
+    <li>タスクの完了状態の更新</li>
   </ul>
+</section>
 
-  <h2>Googleアカウントへのアクセス</h2>
-  <p>本人の許可を受けてGoogle Tasksにアクセスします。
-     タスクの読み取りと変更に必要な権限を使用します。</p>
+<section>
+  <h2>運用・セキュリティ</h2>
+  <ul>
+    <li>OAuth 2.0を使用したGoogleアカウント認証</li>
+    <li>認証情報を公開リポジトリに保存しない構成</li>
+    <li>Linuxのファイル権限による認証情報のアクセス制限</li>
+    <li>systemdによるサービスの自動起動・再起動</li>
+    <li>外部IPv4アドレスを使わないVM構成</li>
+    <li>暗号化されたHTTPS通信の利用</li>
+  </ul>
+  <p>
+    APIキー、OAuthトークン、認証用シークレットは、
+    この公開Webサイトには掲載していません。
+  </p>
+</section>
 
-  <h2>利用対象</h2>
-  <p>開発者本人による個人利用を想定しています。
-     一般向けのサービスとして提供していません。</p>
+<section>
+  <h2>開発目的</h2>
+  <p>
+    個人のタスク管理を効率化するとともに、
+    PythonによるAPI連携、OAuth認証、MCPサーバー開発、
+    Linuxクラウド運用について実践的に学ぶことを
+    目的としています。
+  </p>
+  <p>
+    本プロジェクトは非営利の個人開発であり、
+    一般向けサービスの販売や収益化を目的としていません。
+  </p>
+</section>
 
-  <p><a href="privacy.html">プライバシーポリシー</a></p>
+<section>
+  <h2>プライバシー・お問い合わせ</h2>
+  <p>
+    Google Tasksデータの取扱いについては、
+    <a href="privacy.html">プライバシーポリシー</a>をご覧ください。
+  </p>
+  <p>
+    開発者へのお問い合わせは、
+    <a href="https://github.com/dentyu-ops">
+      GitHubプロフィール
+    </a>からお願いします。
+  </p>
+</section>
+
+</main>
+
+<footer>
+  <p>Personal Task Bridge — Personal Software Development Project</p>
+  <p>© 2026 Personal Task Bridge</p>
+</footer>
+
 </body>
 </html>
